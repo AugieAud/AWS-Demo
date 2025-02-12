@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import axios from "axios";
 
@@ -10,25 +11,41 @@ export default function Home() {
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file");
+    try {
+      if (!file) return alert("Please select a file");
 
-    // Step 1: Request a signed URL from API Gateway
-    const { data } = await axios.post(
-      "https://21hodsnpf6.execute-api.ap-southeast-2.amazonaws.com/dev/generate-upload-erl",
-      {
-        fileName: file.name,
-        fileType: file.type,
+      // Step 1: Request a signed URL from API Gateway
+      const { data } = await axios.post(
+        "https://21hodsnpf6.execute-api.ap-southeast-2.amazonaws.com/dev/generate-upload-erl",
+        {
+          fileName: file.name,
+          fileType: file.type,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      setUploadURL(data.uploadURL);
+
+      // Step 2: Upload the file to S3
+      await axios.put(data.uploadURL, file, {
+        headers: {
+          "Content-Type": file.type,
+        },
+      });
+
+      alert("File uploaded successfully!");
+    } catch (error) {
+      console.error("Upload error:", error);
+      if (axios.isAxiosError(error)) {
+        alert(`Upload failed: ${error.message}`);
+      } else {
+        alert("An unexpected error occurred during upload");
       }
-    );
-
-    setUploadURL(data.uploadURL);
-
-    // Step 2: Upload the file to S3
-    await axios.put(data.uploadURL, file, {
-      headers: { "Content-Type": file.type },
-    });
-
-    alert("File uploaded successfully!");
+    }
   };
 
   return (
