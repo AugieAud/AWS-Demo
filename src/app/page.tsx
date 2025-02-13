@@ -65,15 +65,34 @@ export default function Home() {
     }
   };
   return (
-    <div className="flex flex-col items-center">
-      <h1 className="text-2xl font-bold">Upload an Image</h1>
-      <input type="file" onChange={handleFileChange} />
-      <button
-        onClick={handleUpload}
-        className="mt-2 p-2 bg-blue-500 text-white"
-      >
-        Upload
-      </button>
+    <div className="min-h-screen flex items-center justify-center flex-col bg-teal-500">
+      <div className="max-w-md w-full p-6 bg-pink-200 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-center mb-8">Upload an Image</h1>
+        <div className="space-y-4">
+          <div className="flex justify-center">
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file: font-semibold
+              file:bg-teal-500 file:text-white
+              hover:file:bg-pink-200
+        "
+            />
+          </div>
+
+          <button
+            onClick={handleUpload}
+            className="w-full py-2 px-4 bg-teal-500 text-white font-semibold rounded-lg
+              shadow-md hover:bg-pink-200 focus:outline-none focus:ring-2
+              focus:ring-teal-500 focus:ring-opacity-75 transition-colors"
+          >
+            Upload
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
